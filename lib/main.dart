@@ -36,6 +36,10 @@ class _MyHomePageState extends State {
   TextEditingController longitudeController = TextEditingController();
 
   double _zoom = 13.0;
+  double? _north;
+  double? _east;
+  double? _south;
+  double? _west;
   final Completer<GoogleMapController> _googleMapController = Completer();
 
   Future<bool> requestLocationPermission() async {
@@ -102,6 +106,25 @@ class _MyHomePageState extends State {
         latitudeController.text = position.target.latitude.toString();
         longitudeController.text = position.target.longitude.toString();
       },
+      onCameraIdle: () async {
+        GoogleMapController controller = await _googleMapController.future;
+        double zoom = await controller.getZoomLevel();
+        LatLngBounds bounds = await controller.getVisibleRegion();
+
+        setState(() {
+          _zoom = zoom;
+          _north = bounds.northeast.latitude;
+          _east = bounds.northeast.longitude;
+          _south = bounds.southwest.latitude;
+          _west = bounds.southwest.longitude;
+        });
+
+        // テキストフィールドの更新
+        double latitude = (_north! + _south!) / 2;
+        double longitude = (_east! + _west!) / 2;
+        latitudeController.text = latitude.toString();
+        longitudeController.text = longitude.toString();
+      },
     );
 
     return Scaffold(
@@ -165,6 +188,14 @@ class _MyHomePageState extends State {
             child: googleMap,
           ),
           Text('zoom: $_zoom'),
+          Visibility(
+            visible: (_north != null),
+            child: Text('latitude: $_north~$_south'),
+          ),
+          Visibility(
+            visible: (_east != null),
+            child: Text('longitude: $_east~$_west'),
+          ),
         ] ),
       ),
     );

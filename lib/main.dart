@@ -75,7 +75,7 @@ class _MyHomePageState extends State {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       // テキストフィールドの更新
       latitudeController.text = _latitude.toString();
       longitudeController.text = _longitude.toString();
@@ -178,7 +178,7 @@ class _MyHomePageState extends State {
                 String mapsUrl = 'https://www.google.com/maps/search/?api=1';
                 double latitude = double.parse(_latitude);
                 double longitude = double.parse(_longitude);
-                launch('$mapsUrl&query=$latitude,$longitude', forceSafariVC: false);
+                launchUrl( Uri.parse('$mapsUrl&query=$latitude,$longitude'), mode: LaunchMode.externalApplication );
               },
             ),
           ] ),

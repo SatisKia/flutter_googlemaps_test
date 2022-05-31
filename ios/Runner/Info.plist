@@ -43,5 +43,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>位置情報へのアクセスを求めています。</string>
 </dict>
 </plist>
